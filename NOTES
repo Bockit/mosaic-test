@@ -8,9 +8,9 @@ Test Notes
 * The requirements said testable, I'm not sure if that means you don't want me to write tests or not so I've included some as examples. `npm test`. They're not near exhaustive, I would need more time to set up mocks and a test runner for the browser. I hope you can see my plan for testing ([tape][tape], and I'd add [proxyquireify][pqfy] to mock required moduels). I usually use [zuul][zuul] to run them in the browser.
 * Total time was 4 hours, but I spent 50~ minutes looking into file drag and drop because I had a free morning and I hadn't done it before :) Turns out there were a couple of gothcas
 * Some improvements I would make if I had more time and the problems they solve were deemed worth it:
-    - I have a feeling the execute function which runs all the image loading tasks could be better adapted to the browser's environment. I.e., at the moment it tries to load all images at once and draws the rows as they come down. In practice for me the rows still came down and ended up rendering in order but I wonder if fetching 1 row at a time would yield improvements. I would need to benchmark it. Also it could probably be an
-    event emitter instead of a function taking a callback.
-    - Tasks with the same colour value should only cause 1 fetch. Promises + memoization might be an easy win there.
+    - I have a feeling the execute function which runs all the image loading tasks could be better adapted to the browser's environment. I.e., at the moment it tries to load all images at once and draws the rows as they come down. In practice for me the rows still came down in about the rendering order but I wonder if fetching 1 row at a time would yield improvements of time. I would need to benchmark it. Also it could probably be an
+    event emitter instead of a function taking a callback from an API improvement standpoint.
+    - Tasks with the same colour value should only cause 1 fetch. Promises + memoization would probably be an easy win here.
     - The browser freezes a little on big images as I read pixel data. There are a couple of approaches I would take here if it was deemed a problem. In all cases I would benchmark.
         1. For smaller images where it would be ok to load the whole thing into memory it might be faster to call getImageData() once and throw it into a webworker.
         2. For larger images I would try either breaking into smaller regions and then following 1.
