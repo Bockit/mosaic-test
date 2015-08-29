@@ -27,10 +27,9 @@ function FileDragger () {
 
     function drop (e) {
         cancel(e)
-        // Don't want to have to deal with knowing not to try and render 2
-        // files on top of each other. Cheating a little.
-        if (event.dataTransfer.files[0]) {
-            emitter.emit('file', event.dataTransfer.files[0])
+
+        for (var i = 0; i < e.dataTransfer.files.length; i++) {
+            emitter.emit('file', e.dataTransfer.files[i])
         }
     }
 
