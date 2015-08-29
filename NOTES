@@ -1,0 +1,22 @@
+Test Notes
+----------
+
+* I swapped to a watchify bundler instead of n js files.
+    - `npm install` first, then `npm run watch` each time
+    - At the end I commited the bundle.js file to the repo so you can still easily run with `./start.sh`
+* I added a css endpoint to the server
+* The requirements said testable, I'm not sure if that means you don't want me to write tests or not so I've included some as examples. They're not near exhaustive, I would need more time to set up mocks and a test runner for the browser. I hope you can see my plan for testing ([tape][tape], and I'd add [proxyquireify][pqfy] to mock required moduels). I usually use [zuul][zuul] to run them in the browser.
+* Total time was 4 hours, but I spent 50~ minutes looking into file drag and drop because I had a free morning and I hadn't done it before :) Turns out there were a couple of gothcas
+* Some improvements I would make if I had more time and the problems they solve were deemed worth it:
+    - I have a feeling the execute function which runs all the image loading tasks could be better adapted to the browser's environment. I.e., at the moment it tries to load all images at once and draws the rows as they come down. In practice for me the rows still came down and ended up rendering in order but I wonder if fetching 1 row at a time would yield improvements. I would need to benchmark it.
+    - Tasks with the same colour value should only cause 1 fetch. Promises + memoization might be an easy win there.
+    - The browser freezes a little on big images as I read pixel data. There are a couple of approaches I would take here if it was deemed a problem. In all cases I would benchmark.
+        1. For smaller images where it would be ok to load the whole thing into memory it might be faster to call getImageData() once and throw it into a webworker.
+        2. For larger images I would try either breaking into smaller regions and then following 1.
+        3. In both cases, applying a game loop style solution, where it checks how much time has been spent between calculations and if it needs to allow another tick before continuing would prevent freezing the ui and I could display a loading icon.
+* Finally, I couldn't find a public canva styleguide so I just went with my normal style (excluding when I made changes to the server and settings file). I'm not fussed on what the styleguide is, so please don't take my exclusion of semicolons as an unwillingness to use them :)
+
+
+[tape]: http://npmjs.com/tape
+[pqfy]: https://www.npmjs.com/package/proxyquireify
+[zuul]: http://npmjs.com/zuul
