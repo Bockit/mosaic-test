@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "watch": "watchify js/client.js -o js/bundle.js"
+    "watch": "watchify js/client.js --debug -o js/bundle.js"
   },
   "author": "James Hiscock <james@jameshiscock.com> (http://jameshiscock.com/)",
   "license": "UNLICENSED",
