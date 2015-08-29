@@ -7,7 +7,6 @@ var makeCanvas = require('./make-canvas')
 var makeGrid = require('./grid')
 var averageColour = require('./average-colour')
 var rgb2Hex = require('./rgb-to-hex')
-var uBound = require('./ubound')
 
 function mosaic (target, file, settings) {
     // Draw the image into an offscreen canvas
@@ -63,8 +62,8 @@ function tileTaskFactory (ctx, settings) {
           // it's affecting the average values to make them darker. I suspect
           // it gives 0 values (black) for pixels outside the bounds. I'm
           // pretty sure I remember firefox would error out anyway.
-          , uBound(settings.tileWidth, settings.width - cell.x * settings.tileWidth)
-          , uBound(settings.tileHeight, settings.height - cell.y * settings.tileHeight)
+          , Math.min(settings.tileWidth, settings.width - cell.x * settings.tileWidth)
+          , Math.min(settings.tileHeight, settings.height - cell.y * settings.tileHeight)
         ).data
 
         return {
