@@ -8,7 +8,7 @@ function averageColour (pixels) {
     var green = 0
     var blue = 0
 
-    for (var i = 0; i < pixels.length; i+=4) {
+    for (var i = 0; i < pixels.length; i += 4) {
         red += pixels[i]
         green += pixels[i + 1]
         blue += pixels[i + 2]
