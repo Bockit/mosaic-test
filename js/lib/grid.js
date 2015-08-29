@@ -1,5 +1,10 @@
 module.exports = grid
 
+/**
+ * Given a dimensions object (number of `rows` and number of `columns`) create
+ * an array of cell objects, (`x` and `y` properties`) 1 for each cell
+ * in the grid.
+ */
 function grid (dimensions) {
     var ret = []
 
