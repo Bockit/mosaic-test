@@ -35,7 +35,9 @@ function mosaic (target, file, settings) {
         // Add the canvas to the dom so users can see row-by-row
         var dest = makeCanvas(source.width, source.height)
         var ctx = dest.getContext('2d')
-        target.appendChild(dest)
+        var wrapper = makeWrapper(source.width, source.height)
+        wrapper.appendChild(dest)
+        target.appendChild(wrapper)
 
         var executeSettings = {
             rows: dimensions.rows
@@ -127,4 +129,13 @@ function execute (tasks, settings, rowCallback) {
             }
         })
     })
+}
+
+function makeWrapper (width, height) {
+    var ret = document.createElement('div')
+    ret.classList.add('mosaic-wrapper')
+    // +padding +border because border-box
+    ret.style.width = (width + 42) + 'px'
+    ret.style.height = (height + 42) + 'px'
+    return ret
 }
