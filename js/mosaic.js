@@ -2,10 +2,12 @@
 
 var TILE_WIDTH = 16;
 var TILE_HEIGHT = 16;
+var ALLOWED_TYPES = [ 'image/png', 'image/jpeg' ];
 
 var exports = exports || null;
 if (exports) {
   exports.TILE_WIDTH = TILE_WIDTH;
   exports.TILE_HEIGHT = TILE_HEIGHT;
+  exports.ALLOWED_TYPES = ALLOWED_TYPES;
 }
 
