@@ -3,8 +3,8 @@ module.exports = FileDragger
 var EventEmitter = require('events').EventEmitter
 
 /**
- * Returns and event emitter that emits `'file'` events whenever files are dropped
- * into the window.
+ * Returns and event emitter that emits `'file'` events whenever files are
+ * dropped into the window.
  *
  * For the purposes of this codebase it only emits the file at position [0]
  * so mutli file drops won't emit for each file, but that should ideally be
@@ -33,6 +33,9 @@ function FileDragger () {
         }
     }
 
+    /**
+     * Prevent the browser from redirecting to the file dropped in.
+     */
     function cancel (e) {
         e.preventDefault()
         e.stopPropagation()

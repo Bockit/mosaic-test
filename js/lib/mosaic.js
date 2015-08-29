@@ -8,6 +8,22 @@ var makeGrid = require('./grid')
 var averageColour = require('./average-colour')
 var rgb2Hex = require('./rgb-to-hex')
 
+/**
+ * Renders an image to a canvas in a target element as a series of tiles
+ * representing average colours of the areas they cover.
+ *
+ * Takes a target element to put the canvas into, a file object representing
+ * the file from a file input or drag and drop event and a settings object
+ * containing tile width, tile height and a base url for where to load the tiles
+ * from.
+ *
+ * @param  {HTMLElement} target   Where in the DOM to append the mosaic to
+ * @param  {File} file            File object representing the image to render
+ * @param  {Object} settings      Settings for the mosaic call.
+ *                  settings.TILE_WIDTH The width of tiles in this mosaic
+ *                  settings.TILE_HEIGHT the height of tiles in this mosaic
+ *                  settings.BASE_URL The base url for tile image requests
+ */
 function mosaic (target, file, settings) {
     // Draw the image into an offscreen canvas
     imageToCanvas(file, function (err, source) {
@@ -44,9 +60,9 @@ function mosaic (target, file, settings) {
           , columns: dimensions.columns
           , tileWidth: settings.TILE_WIDTH
           , tileHeight: settings.TILE_HEIGHT
+          , baseUrl: settings.BASE_URL
         }
         execute(tasks, executeSettings, function (row, i) {
-            // target.appendChild(row)
             ctx.drawImage(row, 0, i * settings.TILE_HEIGHT)
         })
     })
@@ -105,7 +121,7 @@ function execute (tasks, settings, rowCallback) {
         // just for this bit.
         Promise.all(cells.map(function (cell) {
             var x = cell.x * settings.tileWidth
-            var url = '/color/' + cell.hex
+            var url = settings.baseUrl + 'color/' + cell.hex
 
             return new Promise(function (resolve, reject) {
                 // Duplicate loading image into canvas, might be able to factor
@@ -131,6 +147,12 @@ function execute (tasks, settings, rowCallback) {
     })
 }
 
+/**
+ * Create a div with the wrapper style, of the height and width of the to-be
+ * canvas to better show the user what's happening.
+ *
+ * Don't want DOM operations cluttering up my logic so chucking this in a helper
+ */
 function makeWrapper (width, height) {
     var ret = document.createElement('div')
     ret.classList.add('mosaic-wrapper')
