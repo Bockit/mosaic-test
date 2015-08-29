@@ -5,11 +5,15 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "watch": "watchify js/client.js -o js/bundle.js"
   },
   "author": "James Hiscock <james@jameshiscock.com> (http://jameshiscock.com/)",
   "license": "UNLICENSED",
   "dependencies": {
     "gm": "^1.18.1"
+  },
+  "devDependencies": {
+    "watchify": "^3.3.1"
   }
 }

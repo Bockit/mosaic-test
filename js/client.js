@@ -1,1 +1,2 @@
-// Edit me.
+var dimensions = require('./mosaic')
+console.log('dimensions', dimensions)
