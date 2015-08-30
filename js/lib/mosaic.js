@@ -1,6 +1,6 @@
 module.exports = exports = mosaic
 exports.tileTaskFactory = tileTaskFactory
-exports.execute = execute
+exports.executeStrategy = executeStrategy
 
 var imageToCanvas = require('./image-to-canvas')
 var makeCanvas = require('./make-canvas')
@@ -8,6 +8,7 @@ var makeGrid = require('./grid')
 var averageColour = require('./average-colour')
 var rgb2Hex = require('./rgb-to-hex')
 var loadImage = require('./load-image')
+var arraySubset = require('./array-grid-subset')
 
 /**
  * Renders an image to a canvas in a target element as a series of tiles
@@ -26,6 +27,8 @@ var loadImage = require('./load-image')
  *                  settings.BASE_URL The base url for tile image requests
  */
 function mosaic (target, file, settings) {
+    var execute = settings.executeStrategy || executeStrategy
+
     // Draw the image into an offscreen canvas
     imageToCanvas(file, function (err, source) {
         // Need this info in a couple of places
@@ -69,33 +72,9 @@ function mosaic (target, file, settings) {
     })
 }
 
-// Closure so the tileTask function has what it needs
-function tileTaskFactory (ctx, settings) {
-    // Take a cell definition (an object with x and y properties) and return a
-    // task object. A task object has x, y and hex value properties.
-    return function (cell) {
-        var pixels = ctx.getImageData(
-            cell.x * settings.tileWidth
-          , cell.y * settings.tileHeight
-          // Bind these to the dimensions of the image, when it goes over
-          // it's affecting the average values to make them darker. I suspect
-          // it gives 0 values (black) for pixels outside the bounds. I'm
-          // pretty sure I remember firefox would error out anyway.
-          , Math.min(settings.tileWidth, settings.width - cell.x * settings.tileWidth)
-          , Math.min(settings.tileHeight, settings.height - cell.y * settings.tileHeight)
-        ).data
-
-        return {
-            x: cell.x
-          , y: cell.y
-          , hex: rgb2Hex.apply(null, averageColour(pixels))
-        }
-    }
-}
-
 // Execute the tasks in a way we can call n times, where n is the number of rows
 // and the order of the calls matches the order of the rows.
-function execute (tasks, settings, rowCallback) {
+function executeStrategy (tasks, settings, rowCallback) {
     // Reduce to rows
     var rows = tasks.reduce(function (previous, current) {
         previous[current.y] = previous[current.y] || []
@@ -138,6 +117,33 @@ function execute (tasks, settings, rowCallback) {
     })
 }
 
+// Closure so the tileTask function has what it needs
+function tileTaskFactory (ctx, settings) {
+    var imageData = ctx.getImageData(0, 0, settings.width, settings.height).data
+    // Take a cell definition (an object with x and y properties) and return a
+    // task object. A task object has x, y and hex value properties.
+    return function (cell) {
+        var pixels = arraySubset(imageData, {
+            width: settings.width
+          , height: settings.height
+            // each pixel is actually 4 array cells
+          , cellSize: 4
+        }, {
+            x: cell.x * settings.tileWidth
+          , y: cell.y * settings.tileHeight
+          // Bind these to the dimensions of the image
+          , width: Math.min(settings.tileWidth, settings.width - cell.x * settings.tileWidth)
+          , height: Math.min(settings.tileHeight, settings.height - cell.y * settings.tileHeight)
+        })
+
+        return {
+            x: cell.x
+          , y: cell.y
+          , hex: rgb2Hex.apply(null, averageColour(pixels))
+        }
+    }
+}
+
 /**
  * Create a div with the wrapper style, of the height and width of the to-be
  * canvas to better show the user what's happening.
@@ -147,7 +153,7 @@ function execute (tasks, settings, rowCallback) {
 function makeWrapper (width, height) {
     var ret = document.createElement('div')
     ret.classList.add('mosaic-wrapper')
-    // +padding +border because border-box
+    // +padding +border because of box-sizing: border-box;
     ret.style.width = (width + 42) + 'px'
     ret.style.height = (height + 42) + 'px'
     return ret
