@@ -8,6 +8,7 @@ function averageColour (pixels) {
     var green = 0
     var blue = 0
 
+    // Each pixel is actually 4 cells in the array
     for (var i = 0; i < pixels.length; i += 4) {
         red += pixels[i]
         green += pixels[i + 1]
