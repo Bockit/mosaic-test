@@ -5,7 +5,7 @@ main() {
   brew install imagemagick
   brew install graphicsmagick
   brew install npm
-  npm install gm
+  npm install
 }
 
 main "$@"
