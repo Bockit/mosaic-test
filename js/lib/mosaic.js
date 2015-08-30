@@ -7,6 +7,7 @@ var makeCanvas = require('./make-canvas')
 var makeGrid = require('./grid')
 var averageColour = require('./average-colour')
 var rgb2Hex = require('./rgb-to-hex')
+var loadImage = require('./load-image')
 
 /**
  * Renders an image to a canvas in a target element as a series of tiles
@@ -116,22 +117,12 @@ function execute (tasks, settings, rowCallback) {
 
         // As they are fetched, render to an offscreen context so we can render
         // the whole row at once to the user
-        //
-        // Use a promise here because I don't want to include the async package
-        // just for this bit.
         Promise.all(cells.map(function (cell) {
             var x = cell.x * settings.tileWidth
             var url = settings.baseUrl + 'color/' + cell.hex
 
-            return new Promise(function (resolve, reject) {
-                // Duplicate loading image into canvas, might be able to factor
-                // this better.
-                var img = new Image()
-                img.onload = function () {
-                    rowCtx.drawImage(img, x, 0)
-                    resolve()
-                }
-                img.src = url
+            return loadImage(url).then(function (img) {
+                rowCtx.drawImage(img, x, 0)
             })
         })).then(function () {
             // Queue for callback because we have to render rows in order

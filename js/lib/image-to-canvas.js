@@ -1,6 +1,7 @@
 module.exports = imageToCanvas
 
 var makeCanvas = require('./make-canvas')
+var loadImage = require('./load-image')
 
 /**
  * Takes a browser file object and a callback. Calls back with an error if it
@@ -9,8 +10,7 @@ var makeCanvas = require('./make-canvas')
  */
 function imageToCanvas (file, callback) {
     var url = URL.createObjectURL(file)
-    var img = new Image()
-    img.onload = function () {
+    loadImage(url).then(function (img) {
         var canvas = makeCanvas(img.width, img.height)
         var ctx = canvas.getContext('2d')
         ctx.drawImage(img, 0, 0)
@@ -19,6 +19,5 @@ function imageToCanvas (file, callback) {
         // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
         URL.revokeObjectURL(url)
         callback(null, canvas)
-    }
-    img.src = url
+    })
 }
