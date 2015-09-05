@@ -1,15 +1,15 @@
-var FileDragger = require('./lib/file-dragger')
+var FileDragger = require('./lib/browser/file-dragger')
 var mosaic = require('./lib/mosaic')
 
 var settings = {
-    ALLOWED_TYPES: [ 'image/png', 'image/jpeg' ]
-  , BASE_URL: '/'
-  , TILE_HEIGHT: TILE_HEIGHT
-  , TILE_WIDTH: TILE_WIDTH
+    allowedTypes: [ 'image/png', 'image/jpeg' ]
+  , baseUrl: '/'
+  , tileHeight: TILE_HEIGHT
+  , tileWidth: TILE_WIDTH
 }
 
 var dragger = FileDragger()
 dragger.on('file', function (file) {
-    if (settings.ALLOWED_TYPES.indexOf(file.type) === -1) return
+    if (settings.allowedTypes.indexOf(file.type) === -1) return
     mosaic(document.querySelector('.output'), file, settings)
 })
