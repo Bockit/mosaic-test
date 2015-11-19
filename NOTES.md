@@ -56,3 +56,8 @@ I came back on Sunday to implement what I thought were some easy optimisation wi
     Worth keeping! Also, with this change I could drop the idea of a game loop to read from the canvas and process the whole dataset in a webworker.
 
 I stopped there because I didn't want to go too far over the limit of three hours, but my next step would be to refactor execute to be an EventEmitter so I could then handle errors (I'm not, yet) and the API for it wouldn't be so weird.
+
+Post-Submission
+---------------
+
+After submitting the revisit, I had in my mind an idea to implement with streams, so I spend half a day~ rewriting it to be streams.
