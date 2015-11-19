@@ -60,4 +60,4 @@ I stopped there because I didn't want to go too far over the limit of three hour
 Post-Submission
 ---------------
 
-After submitting the revisit, I had in my mind an idea to implement with streams, so I spend half a day~ rewriting it to be streams.
+About a week after submitting the code at "Revisit", I had in my mind an idea to implement with streams, so I spend half a day~ rewriting it to be streams. 
