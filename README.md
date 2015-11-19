@@ -17,9 +17,13 @@ The project skeleton contains a lightweight server (written in node) for
 serving the client app and the tile images.  Install the server dependencies
 with setup.sh, then run the server with start.sh.  Those scripts assume a Mac
 environment, but are trivial enough to replicate on Linux if required.
+
+```
   /              serves mosaic.html
   /js/*          serves static resources
   /color/<hex>   serves a mosaic tile for color <hex>.  e.g., /color/0e4daa
+```
+
 The tile server generates tile images, and caches them in memory; subsequent
 tile requests should be noticably faster.
 
